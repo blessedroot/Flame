@@ -42,7 +42,7 @@ public class FlameScoreboard implements ScoreboardHelper {
     }
 
     /**
-     * Добавляет уникальную "пустую" строку на заданной позиции.
+     * Обьясню легко, просто пустая строка
      */
     public void setEmptyLine(int line) {
         String emptyLine = ChatColor.RESET + "" + ChatColor.values()[uniqueId % ChatColor.values().length] + " ";
