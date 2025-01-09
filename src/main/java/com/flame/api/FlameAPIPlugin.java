@@ -2,6 +2,7 @@ package com.flame.api;
 
 import com.flame.api.api.FlameAPI;
 import com.flame.api.hologram.manager.HologramManager;
+import com.flame.api.item.manager.ItemManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +19,8 @@ public class FlameAPIPlugin extends JavaPlugin {
 
     /**
      * Получить экз.плагина.
+     *
+     * @return FlameAPIPlugin
      */
     public static FlameAPIPlugin getInstance() {
         return instance;
@@ -40,17 +43,22 @@ public class FlameAPIPlugin extends JavaPlugin {
     }
 
     /**
+     *
      * Регистрация апишечки.
+     *
      */
     private void registerAPI() {
         HologramManager hologramManager = HologramManager.getInstance();
         ScoreboardManager scoreboardManager = new ScoreboardManager();
+        ItemManager itemManager = new ItemManager();
 
-        flameAPI = new FlameAPI(hologramManager, scoreboardManager);
+        flameAPI = new FlameAPI(hologramManager, scoreboardManager, itemManager);
     }
 
     /**
      * Получить экз.апишечки.
+     *
+     * @return FlameAPI
      */
     public FlameAPI getFlameAPI() {
         return flameAPI;
