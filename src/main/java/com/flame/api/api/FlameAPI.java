@@ -2,6 +2,7 @@ package com.flame.api.api;
 
 import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
+import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
 
 public class FlameAPI {
@@ -14,11 +15,13 @@ public class FlameAPI {
     private final HologramManager hologramManager;
     private final ScoreboardManager scoreboardManager;
     private final ItemManager itemManager;
+    private final NpcManager npcManager;
 
-    public FlameAPI(HologramManager hologramManager, ScoreboardManager scoreboardManager, ItemManager itemManager) {
+    public FlameAPI(HologramManager hologramManager, ScoreboardManager scoreboardManager, ItemManager itemManager, NpcManager npcManager) {
         this.hologramManager = HologramManager.getInstance();
         this.scoreboardManager = new ScoreboardManager();
         this.itemManager = itemManager;
+        this.npcManager = npcManager;
     }
 
 
@@ -48,5 +51,15 @@ public class FlameAPI {
 
     public ItemManager getItemManager() {
         return itemManager;
+    }
+
+    /**
+     * Получить менеджер для работы с NPC.
+     *
+     * @return NpcManager
+     */
+
+    public NpcManager getNpcManager() {
+        return npcManager;
     }
 }

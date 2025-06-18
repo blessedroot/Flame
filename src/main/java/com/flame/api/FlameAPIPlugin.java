@@ -1,9 +1,13 @@
 package com.flame.api;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import com.flame.api.api.FlameAPI;
 import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
+import com.flame.api.npc.listener.NpcClickListener;
+import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
+import com.flame.api.web.server.WebServer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,12 +20,9 @@ public class FlameAPIPlugin extends JavaPlugin {
 
     private static FlameAPIPlugin instance;
     private FlameAPI flameAPI;
+    private NpcManager npcManager;
+    private WebServer webServer;
 
-    /**
-     * Получить экз.плагина.
-     *
-     * @return FlameAPIPlugin
-     */
     public static FlameAPIPlugin getInstance() {
         return instance;
     }
@@ -30,37 +31,41 @@ public class FlameAPIPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
         registerAPI();
+        ProtocolLibrary.getProtocolManager().addPacketListener(new NpcClickListener());
+        startWebServer();
         getLogger().info("Вызываю пожарных! Включение");
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            flameAPI.getHologramManager().clearAll();
-        });
-
+        Bukkit.getOnlinePlayers().forEach(player -> flameAPI.getHologramManager().clearAll());
+        stopWebServer();
         getLogger().info("Отзываю пожарных! Выключение");
     }
 
-    /**
-     *
-     * Регистрация апишечки.
-     *
-     */
     private void registerAPI() {
-        HologramManager hologramManager = HologramManager.getInstance();
-        ScoreboardManager scoreboardManager = new ScoreboardManager();
-        ItemManager itemManager = new ItemManager();
-
-        flameAPI = new FlameAPI(hologramManager, scoreboardManager, itemManager);
+        flameAPI = new FlameAPI(
+                HologramManager.getInstance(),
+                new ScoreboardManager(),
+                new ItemManager(),
+                new NpcManager()
+        );
     }
 
-    /**
-     * Получить экз.апишечки.
-     *
-     * @return FlameAPI
-     */
+    private void startWebServer() {
+        webServer = new WebServer();
+        webServer.start();
+    }
+
+    private void stopWebServer() {
+        if (webServer != null) webServer.stop();
+    }
+
     public FlameAPI getFlameAPI() {
         return flameAPI;
+    }
+
+    public NpcManager getNpcManager() {
+        return npcManager;
     }
 }

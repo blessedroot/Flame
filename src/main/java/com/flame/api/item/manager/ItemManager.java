@@ -50,7 +50,7 @@ public class ItemManager implements Listener {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || !items.containsKey(clickedItem)) return;
 
-        event.setCancelled(true); // Запрещаем перемещение предмета
+        event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
         Item item = items.get(clickedItem);
         if (item != null) {
