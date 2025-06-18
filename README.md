@@ -23,7 +23,7 @@ Minecraft API 1.8.9 <p>
 
 ## Использование
 
-# maven
+# пук авен
 
 ```xml
 	<repositories>
@@ -44,7 +44,7 @@ Minecraft API 1.8.9 <p>
 </dependencies>
 ```
 
-# gradle
+# Gradle
 
 ```gradle
 repositories {
