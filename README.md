@@ -1,12 +1,9 @@
 <div align="center">
 
 ---
+## Flame
 
-# Flame
-
-API для упрощения кодинга на 1.8, будет постепенно обновляться <p>
-First Commit - 09.01
-<br>
+Minecraft API 1.8.9 <p>
 
 ---
 </div>
@@ -17,11 +14,10 @@ First Commit - 09.01
 
 ---
 
-## бля, это че такое вообще?
+## ну и говнецо?
 
-**Flame** - это API, которая гораздо упростит работу со спиготом и поможет людям, тут будет много функций <p>
-Сейчас реализовано: **Scoreboard, Hologram, Items, Not full Gui**<p>
-В планах: **NPC, LOCALIZATION, NAMETAGS, TAB, LOBBY FUNCTIONS**
+**Flame** - это API, которая гораздо упростит работу <p>
+ Реализовано: **Scoreboard, Hologram, Items, Gui, Npc, WebServer**
 
 ---
 
