@@ -1,7 +1,7 @@
 <div align="center">
 
 ---
-## Flame
+# Flame
 
 Minecraft API 1.8.9 <p>
 
@@ -58,6 +58,41 @@ maven { url 'https://jitpack.io' }
 	dependencies {
 	        implementation 'com.github.blessedroot:Flame:ВЕРСИЯ'
 	}
+```
+
+---
+
+## Примеры использования
+
+### 📊 Scoreboard
+
+```java
+FlameScoreboard scoreboard = new FlameScoreboard("§cFlame");
+
+scoreboard.setLine(1, "§7Убийств: §c0"); // простая строка
+scoreboard.setLine(2, "§7Смертей: §c0");
+scoreboard.setEmptyLine(3); // пустая строка
+
+scoreboard.show(player); // показать игроку борд
+```
+
+---
+
+### 🧍 NPC
+
+```java
+FlameNpc npc = new NpcBuilder()
+    .name("§eНавигатор")
+    .skin("???")
+    .location(player.getLocation())
+    .lookAtPlayer(true или false) // Нпс смотрит на игрока как на hypixel
+    .build();
+
+npc.spawn(player); // показать NPC игроку
+
+NpcClickManager.onClick(npc, (p, click) -> {
+    p.sendMessage("§aклик-клак!");
+});
 ```
 
 ---
