@@ -3,5 +3,5 @@ author: s0ckett
 version: '1.0'
 api-version: '1.13'
 
-# depend: [ProtocolLib]
+depend: [ProtocolLib]
 main: com.flame.api.FlameAPIPlugin
