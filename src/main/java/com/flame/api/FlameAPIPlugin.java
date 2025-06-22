@@ -64,8 +64,4 @@ public class FlameAPIPlugin extends JavaPlugin {
     public FlameAPI getFlameAPI() {
         return flameAPI;
     }
-
-    public NpcManager getNpcManager() {
-        return npcManager;
-    }
 }
