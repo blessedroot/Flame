@@ -1,5 +1,6 @@
 package com.flame.api.api;
 
+import com.flame.api.discord.manager.DiscordManager;
 import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
 import com.flame.api.npc.manager.NpcManager;
@@ -62,4 +63,14 @@ public class FlameAPI {
     public NpcManager getNpcManager() {
         return npcManager;
     }
+
+    /**
+     * Получить менеджер для работы с Discord.
+     *
+     * @return DiscordManager
+     */
+    public DiscordManager getDiscordManager() {
+        return new DiscordManager();
+    }
 }
+
