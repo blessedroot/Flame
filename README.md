@@ -17,7 +17,7 @@ Minecraft API 1.8.9 <p>
 ## ну и говнецо?
 
 **Flame** - это API, которая гораздо упростит работу <p>
- Реализовано: **Scoreboard, Hologram, Items, Gui, Npc, WebServer**
+ Реализовано: **Scoreboard, Hologram, Items, Gui, Npc, WebServer, Discord**
 
 ---
 
