@@ -5,12 +5,18 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.flame.api.FlameAPIPlugin;
+import com.flame.api.api.FlameAPI;
 import com.flame.api.npc.event.NpcClickEvent;
 import com.flame.api.npc.manager.NpcClickManager;
 import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.npc.model.FlameNpc;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
 
 public class NpcClickListener extends PacketAdapter {
 
@@ -35,7 +41,7 @@ public class NpcClickListener extends PacketAdapter {
 
         if (clickType == null) return;
 
-        NpcManager npcManager = FlameAPIPlugin.getInstance().getNpcManager();
+        NpcManager npcManager = FlameAPIPlugin.getInstance().getFlameAPI().getNpcManager();
 
         for (FlameNpc npc : npcManager.getAll()) {
             if (npc.getUuid().hashCode() == entityId) {

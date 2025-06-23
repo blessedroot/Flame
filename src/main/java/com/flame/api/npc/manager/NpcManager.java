@@ -7,6 +7,12 @@ import org.bukkit.Location;
 
 import java.util.*;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
+
 public class NpcManager {
 
     private final Map<UUID, FlameNpc> npcs = new HashMap<>();

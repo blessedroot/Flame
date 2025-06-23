@@ -8,6 +8,12 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
+
 public class FlameNpc {
 
     private final UUID uuid;

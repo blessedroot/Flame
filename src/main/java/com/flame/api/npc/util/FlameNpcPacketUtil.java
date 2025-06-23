@@ -11,6 +11,12 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.EnumSet;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
+
 public class FlameNpcPacketUtil {
 
     public static void spawnNpc(Player player, FlameNpc npc) {

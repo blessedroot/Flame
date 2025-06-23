@@ -5,6 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
 public class NpcClickEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();

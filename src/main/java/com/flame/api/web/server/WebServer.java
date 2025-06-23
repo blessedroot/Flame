@@ -6,6 +6,11 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
 public class WebServer {
 
     private HttpServer server;

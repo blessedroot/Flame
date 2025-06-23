@@ -9,6 +9,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
+
 public class NpcClickManager {
 
     private static final Map<UUID, BiConsumer<Player, NpcClickEvent.ClickType>> actions = new HashMap<>();

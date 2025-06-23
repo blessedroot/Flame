@@ -9,6 +9,12 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
+
 public class PlayerDataHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {

@@ -5,3 +5,8 @@ api-version: '1.13'
 
 depend: [ProtocolLib]
 main: com.flame.api.FlameAPIPlugin
+
+commands:
+  menu:
+    description: Открывает примерное меню
+    usage: /menu

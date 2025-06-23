@@ -5,6 +5,11 @@ import com.mojang.authlib.GameProfile;
 
 import java.util.UUID;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
 public class Skin {
 
     public static WrappedGameProfile fetchSkin(String playerName) {

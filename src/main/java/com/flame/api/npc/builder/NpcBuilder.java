@@ -5,6 +5,11 @@ import com.flame.api.npc.fetcher.Skin;
 import com.flame.api.npc.model.FlameNpc;
 import org.bukkit.Location;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
 public class NpcBuilder {
 
     private String name;

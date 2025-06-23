@@ -2,6 +2,12 @@ package com.flame.api.web.model;
 
 import java.util.UUID;
 
+/**
+ * author : s0ckett
+ * date : 23.06.25
+ */
+
+
 public class ApiPlayer {
     private final UUID uuid;
     private final String name;
