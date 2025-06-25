@@ -2,6 +2,8 @@ package com.flame.api.chain;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,34 +17,66 @@ import java.util.function.Consumer;
 public class Chain {
 
     private final Player player;
-    private final Queue<Consumer<Player>> steps = new LinkedList<>();
+    private final Plugin plugin;
+    private final Queue<Runnable> steps = new LinkedList<>();
+    private boolean async = false;
+    private boolean cancelled = false;
+    private BukkitTask currentTask;
 
-    public Chain(Player player) {
+    public Chain(Player player, Plugin plugin) {
         this.player = player;
+        this.plugin = plugin;
     }
 
     public static Chain start(Player player) {
-        return new Chain(player);
+        return new Chain(player, Bukkit.getPluginManager().getPlugin("Flame"));
     }
 
     public Chain then(Consumer<Player> step) {
-        steps.add(step);
+        steps.add(() -> {
+            if (!cancelled) step.accept(player);
+            runNext();
+        });
         return this;
     }
 
-    public void runSync() {
-        Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("FlameAPI"), this::runNext);
+    public Chain delay(long ticks) {
+        steps.add(() -> {
+            if (cancelled) return;
+            currentTask = (async ?
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, this::runNext, ticks) :
+                    Bukkit.getScheduler().runTaskLater(plugin, this::runNext, ticks)
+            );
+        });
+        return this;
     }
 
-    public void runAsync() {
-        Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("FlameAPI"), this::runNext);
+    public Chain async() {
+        this.async = true;
+        return this;
+    }
+
+    public Chain sync() {
+        this.async = false;
+        return this;
+    }
+
+    public void cancel() {
+        this.cancelled = true;
+        if (currentTask != null) currentTask.cancel();
+    }
+
+    public void run() {
+        runNext();
     }
 
     private void runNext() {
-        Consumer<Player> step = steps.poll();
-        if (step != null) {
-            step.accept(player);
-            runNext();
+        Runnable step = steps.poll();
+        if (step == null || cancelled) return;
+        if (async) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, step);
+        } else {
+            Bukkit.getScheduler().runTask(plugin, step);
         }
     }
 }
