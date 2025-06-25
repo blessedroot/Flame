@@ -29,6 +29,11 @@ public class Effect {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 
+    public static void playEffect(Player player, EnumParticle particle, Location loc, int count, Sound sound) {
+       playParticle(player, particle, loc, count);
+       playSound(player, sound);
+    }
+
     public static void playCircle(Player player, EnumParticle particle, Location center, int points, double radius) {
         for (int i = 0; i < points; i++) {
             double angle = 2 * Math.PI * i / points;
