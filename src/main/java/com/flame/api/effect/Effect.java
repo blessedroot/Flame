@@ -42,4 +42,12 @@ public class Effect {
     public static void playSound(Player player, Sound sound) {
         player.playSound(player.getLocation(), sound, 1f, 1f);
     }
+
+    public static void playLevelUpEffect(Player player) {
+        playEffect(player, EnumParticle.VILLAGER_HAPPY, player.getLocation(), 10, Sound.LEVEL_UP);
+    }
+
+    public static void playDeathEffect(Player player) {
+        playEffect(player, EnumParticle.SMOKE_NORMAL, player.getLocation(), 20, Sound.WITHER_DEATH);
+    }
 }
