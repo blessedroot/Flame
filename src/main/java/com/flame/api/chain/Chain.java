@@ -2,8 +2,6 @@ package com.flame.api.chain;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -17,19 +15,16 @@ import java.util.function.Consumer;
 public class Chain {
 
     private final Player player;
-    private final Plugin plugin;
     private final Queue<Runnable> steps = new LinkedList<>();
     private boolean async = false;
     private boolean cancelled = false;
-    private BukkitTask currentTask;
 
-    public Chain(Player player, Plugin plugin) {
+    public Chain(Player player) {
         this.player = player;
-        this.plugin = plugin;
     }
 
     public static Chain start(Player player) {
-        return new Chain(player, Bukkit.getPluginManager().getPlugin("Flame"));
+        return new Chain(player);
     }
 
     public Chain then(Consumer<Player> step) {
@@ -43,10 +38,11 @@ public class Chain {
     public Chain delay(long ticks) {
         steps.add(() -> {
             if (cancelled) return;
-            currentTask = (async ?
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, this::runNext, ticks) :
-                    Bukkit.getScheduler().runTaskLater(plugin, this::runNext, ticks)
-            );
+            if (async) {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(Bukkit.getPluginManager().getPlugin("FlameAPI"), this::runNext, ticks);
+            } else {
+                Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("FlameAPI"), this::runNext, ticks);
+            }
         });
         return this;
     }
@@ -63,10 +59,15 @@ public class Chain {
 
     public void cancel() {
         this.cancelled = true;
-        if (currentTask != null) currentTask.cancel();
     }
 
-    public void run() {
+    public void runSync() {
+        this.async = false;
+        runNext();
+    }
+
+    public void runAsync() {
+        this.async = true;
         runNext();
     }
 
@@ -74,9 +75,9 @@ public class Chain {
         Runnable step = steps.poll();
         if (step == null || cancelled) return;
         if (async) {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, step);
+            Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("FlameAPI"), step);
         } else {
-            Bukkit.getScheduler().runTask(plugin, step);
+            Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("FlameAPI"), step);
         }
     }
 }
