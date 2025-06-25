@@ -8,7 +8,7 @@ public class CooldownManager {
 
     private static final Map<UUID, Map<String, Long>> data = new HashMap<>();
 
-    public static boolean check(Player p, Sting key, long seconds) {
+    public static boolean check(Player p, String key, long seconds) {
         return timeLeft(p, key) <= 0 || reset(p, key, seconds);
     }
 
