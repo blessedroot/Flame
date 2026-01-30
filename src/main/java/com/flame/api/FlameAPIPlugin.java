@@ -38,7 +38,7 @@ public class FlameAPIPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
         registerAPI();
-        getCommand("menu").setExecutor(new MenuCommand());
+//        getCommand("menu").setExecutor(new MenuCommand());
         ProtocolLibrary.getProtocolManager().addPacketListener(new NpcClickListener());
         getLogger().info("Вызываю пожарных! Включение");
         startWebServer();
@@ -48,7 +48,7 @@ public class FlameAPIPlugin extends JavaPlugin {
     public void onDisable() {
         Bukkit.getOnlinePlayers().forEach(player -> flameAPI.getHologramManager().clearAll());
         stopWebServer();
-        MenuManagerHolder.reset();
+//        MenuManagerHolder.reset();
         getLogger().info("Отзываю пожарных! Выключение");
     }
 
@@ -57,17 +57,16 @@ public class FlameAPIPlugin extends JavaPlugin {
         ScoreboardManager scoreboardManager = new ScoreboardManager();
         ItemManager itemManager = new ItemManager();
         NpcManager npcManager = new NpcManager();
-        MenuManager menuManager = new MenuManager(this);
+//        MenuManager menuManager = new MenuManager(this);
 
-        MenuManagerHolder.set(menuManager);
-        getServer().getPluginManager().registerEvents(new MenuListener(menuManager), this);
+//        MenuManagerHolder.set(menuManager);
+//        getServer().getPluginManager().registerEvents(new MenuListener(menuManager), this);
 
         flameAPI = new FlameAPI(
                 hologramManager,
                 scoreboardManager,
                 itemManager,
-                npcManager,
-                menuManager
+                npcManager
         );
     }
 

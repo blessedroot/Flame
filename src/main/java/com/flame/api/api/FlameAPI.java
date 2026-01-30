@@ -3,7 +3,6 @@ package com.flame.api.api;
 import com.flame.api.discord.manager.DiscordManager;
 import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
-import com.flame.api.menu.manager.MenuManager;
 import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
 
@@ -18,18 +17,20 @@ public class FlameAPI {
     private final ScoreboardManager scoreboardManager;
     private final ItemManager itemManager;
     private final NpcManager npcManager;
-    private final MenuManager menuManager;
+//    private final MenuManager menuManager;
 
     public FlameAPI(HologramManager hologramManager,
                     ScoreboardManager scoreboardManager,
                     ItemManager itemManager,
-                    NpcManager npcManager,
-                    MenuManager menuManager) {
+                    NpcManager npcManager)
+//                    MenuManager menuManager)
+    {
+
         this.hologramManager = hologramManager;
         this.scoreboardManager = scoreboardManager;
         this.itemManager = itemManager;
         this.npcManager = npcManager;
-        this.menuManager = menuManager;
+//        this.menuManager = menuManager;
     }
 
 
@@ -85,8 +86,8 @@ public class FlameAPI {
      *
      * @return MenuManager
      */
-    public MenuManager getMenuManager() {
-        return menuManager;
-    }
+//    public MenuManager getMenuManager() {
+//        return menuManager;
+//    }
 }
 
