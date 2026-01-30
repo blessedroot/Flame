@@ -1,94 +1,111 @@
 <div align="center">
 
----
-# Flame
+# 🔥 Flame
+### Minecraft API • 1.8.9
 
-Minecraft API 1.8.9 <p>
+не болей друг! бери флейм и делай
 
----
+[![JitPack](https://jitpack.io/v/blessedroot/Flame.svg)](https://jitpack.io/#blessedroot/Flame)
+
+**Scoreboard • Hologram • GUI • NPC • Web • Discord • Menu • ActionBar • EventBus • Cooldown • Config • ActionChain**
+
 </div>
 
-### Обратная связь
+---
 
-+ **[ТГК](https://t.me/playboyjava)**
+## 💬 Обратная связь
+- **Telegram:** https://t.me/
 
 ---
 
-## ну и говнецо?
-
-**Flame** - это API, которая гораздо упростит работу <p>
- Реализовано: **Scoreboard, Hologram, Items, Gui, Npc, WebServer, Discord, Menu, Action-bar, EventBus, Cooldown, Config, ActionChain**
+## ❓ Что это вообще такое?
+**Flame** — лёгкое и удобное API для **Minecraft 1.8.9**, которое закрывает рутину и даёт быстрый старт:
+- понятный API
+- готовые модули из коробки
 
 ---
 
-## Использование
+## 🚀 Возможности
 
-# пук авен
+| Модуль | Описание |
+|------|---------|
+| 📊 Scoreboard | Динамические борды без боли |
+| 🧍 NPC | NPC с кликами и поворотом к игроку |
+| 🪧 Hologram | Голограммы над головой |
+| 🎒 Items | Удобная работа с предметами |
+| 🔔 ActionBar | Экшн-бар сообщения |
+| 🧠 EventBus | Свой event bus |
+| ⏱ Cooldown | Таймеры и кулдауны |
+| ⚙️ Config | Конфиги без страданий |
+| 🔗 ActionChain | Цепочки действий |
+| 🌐 WebServer | Встроенный веб-сервер |
+| 🤖 Discord | Интеграция с Discord |
 
+---
+
+## 📦 Установка
+
+### Maven
 ```xml
-	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
 ```
 
 ```xml
 <dependencies>
-<dependency>
-	    <groupId>com.github.blessedroot</groupId>
-	    <artifactId>Flame</artifactId>
-	    <version>ВЕРСИЯ</version>
-	</dependency>
+  <dependency>
+    <groupId>com.github.blessedroot</groupId>
+    <artifactId>Flame</artifactId>
+    <version>ВЕРСИЯ</version>
+  </dependency>
 </dependencies>
 ```
 
-# Gradle
-
+### Gradle
 ```gradle
 repositories {
-	mavenCentral()
-maven { url 'https://jitpack.io' }
-		}
-	}
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
 ```
 
 ```gradle
-	dependencies {
-	        implementation 'com.github.blessedroot:Flame:ВЕРСИЯ'
-	}
+dependencies {
+    implementation 'com.github.blessedroot:Flame:ВЕРСИЯ'
+}
 ```
 
 ---
 
-## Примеры использования
+## 🧪 Примеры использования
 
 ### 📊 Scoreboard
-
 ```java
 FlameScoreboard scoreboard = new FlameScoreboard("§cFlame");
 
-scoreboard.setLine(1, "§7Убийств: §c0"); // простая строка
+scoreboard.setLine(1, "§7Убийств: §c0");
 scoreboard.setLine(2, "§7Смертей: §c0");
-scoreboard.setEmptyLine(3); // пустая строка
+scoreboard.setEmptyLine(3);
 
-scoreboard.show(player); // показать игроку борд
+scoreboard.show(player);
 ```
 
 ---
 
 ### 🧍 NPC
-
 ```java
 FlameNpc npc = new NpcBuilder()
     .name("§eНавигатор")
     .skin("???")
     .location(player.getLocation())
-    .lookAtPlayer(true или false) // Нпс смотрит на игрока как на hypixel
+    .lookAtPlayer(true) // как на Hypixel
     .build();
 
-npc.spawn(player); // показать NPC игроку
+npc.spawn(player);
 
 NpcClickManager.onClick(npc, (p, click) -> {
     p.sendMessage("§aклик-клак!");
@@ -96,3 +113,20 @@ NpcClickManager.onClick(npc, (p, click) -> {
 ```
 
 ---
+
+## 🧠
+- ⚡ быстро
+- 🧼 чисто
+- 🧩 модульно
+
+---
+
+## 🧯 Статус проекта
+- 🔧 В активной разработке
+- 💡 Идеи приветствуются
+
+---
+
+<div align="center">
+
+</div>
