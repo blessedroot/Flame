@@ -8,20 +8,20 @@ import java.util.UUID;
 
 /**
  * author : s0ckett
- * date : 31.01.26
+ * date : 01.02.26
  */
-public class ApiPlayer {
+public class NettyApiPlayer {
 
     private final UUID uuid;
     private final String name;
     private final int balance;
     private final Map<String, Object> customData;
 
-    public ApiPlayer(UUID uuid, String name, int balance) {
+    public NettyApiPlayer(UUID uuid, String name, int balance) {
         this(uuid, name, balance, new HashMap<>());
     }
 
-    public ApiPlayer(UUID uuid, String name, int balance, Map<String, Object> customData) {
+    public NettyApiPlayer(UUID uuid, String name, int balance, Map<String, Object> customData) {
         if (uuid == null) {
             throw new IllegalArgumentException("UUID cannot be null");
         }
@@ -35,18 +35,18 @@ public class ApiPlayer {
         this.customData = customData != null ? new HashMap<>(customData) : new HashMap<>();
     }
 
-    public static ApiPlayer fromPlayer(Player player, int balance) {
+    public static NettyApiPlayer fromPlayer(Player player, int balance) {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");
         }
-        return new ApiPlayer(player.getUniqueId(), player.getName(), balance);
+        return new NettyApiPlayer(player.getUniqueId(), player.getName(), balance);
     }
 
-    public static ApiPlayer fromPlayer(Player player, int balance, Map<String, Object> customData) {
+    public static NettyApiPlayer fromPlayer(Player player, int balance, Map<String, Object> customData) {
         if (player == null) {
             throw new IllegalArgumentException("Player cannot be null");
         }
-        return new ApiPlayer(player.getUniqueId(), player.getName(), balance, customData);
+        return new NettyApiPlayer(player.getUniqueId(), player.getName(), balance, customData);
     }
 
     public UUID getUuid() {
@@ -153,26 +153,21 @@ public class ApiPlayer {
             return this;
         }
 
-        public ApiPlayer build() {
-            return new ApiPlayer(uuid, name, balance, customData);
+        public NettyApiPlayer build() {
+            return new NettyApiPlayer(uuid, name, balance, customData);
         }
     }
 
     @Override
     public String toString() {
-        return "ApiPlayer{" +
-                "uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", balance=" + balance +
-                ", customData=" + customData +
-                '}';
+        return "NettyApiPlayer{uuid=" + uuid + ", name='" + name + "', balance=" + balance + "}";
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof ApiPlayer)) return false;
-        ApiPlayer other = (ApiPlayer) obj;
+        if (!(obj instanceof NettyApiPlayer)) return false;
+        NettyApiPlayer other = (NettyApiPlayer) obj;
         return uuid.equals(other.uuid);
     }
 

@@ -1,28 +1,34 @@
 package com.flame.api.api;
 
+import com.flame.api.config.ConfigManager;
 import com.flame.api.discord.manager.DiscordManager;
 import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
 import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
 public class FlameAPI {
 
     /**
      * author : s0ckett
-     * date : 23.06.25
+     * date : 01.02.26
      */
 
     private final HologramManager hologramManager;
     private final ScoreboardManager scoreboardManager;
     private final ItemManager itemManager;
     private final NpcManager npcManager;
+    private final DiscordManager discordManager;
+    private final ConfigManager configManager;
 //    private final MenuManager menuManager;
 
     public FlameAPI(HologramManager hologramManager,
                     ScoreboardManager scoreboardManager,
                     ItemManager itemManager,
-                    NpcManager npcManager)
+                    NpcManager npcManager,
+                    DiscordManager discordManager,
+                    ConfigManager configManager)
 //                    MenuManager menuManager)
     {
 
@@ -30,6 +36,8 @@ public class FlameAPI {
         this.scoreboardManager = scoreboardManager;
         this.itemManager = itemManager;
         this.npcManager = npcManager;
+        this.discordManager = discordManager;
+        this.configManager = configManager;
 //        this.menuManager = menuManager;
     }
 
@@ -81,13 +89,8 @@ public class FlameAPI {
         return new DiscordManager();
     }
 
-    /**
-     * Получить менеджер для работы с Menu.
-     *
-     * @return MenuManager
-     */
-//    public MenuManager getMenuManager() {
-//        return menuManager;
-//    }
+    public ConfigManager getConfigManager() {
+        return new ConfigManager();
+    }
 }
 

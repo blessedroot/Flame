@@ -1,6 +1,6 @@
 package com.flame.api.web.handler;
 
-import com.flame.api.web.model.ApiPlayer;
+import com.flame.api.web.model.NettyApiPlayer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.bukkit.Bukkit;
@@ -50,7 +50,7 @@ public class PlayerDataHandler implements HttpHandler {
             customData.put("world", player.getWorld().getName());
             customData.put("online", true);
 
-            ApiPlayer apiPlayer = ApiPlayer.fromPlayer(player, 0, customData);
+            NettyApiPlayer apiPlayer = NettyApiPlayer.fromPlayer(player, 0, customData);
 
             sendJsonResponse(exchange, 200, apiPlayer.toJson());
 
