@@ -1,5 +1,6 @@
 package com.flame.api.item.manager;
 
+import com.flame.api.FlameAPIPlugin;
 import com.flame.api.item.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -32,16 +33,15 @@ public class ItemManager implements Listener {
 
     private final Map<UUID, Set<UUID>> playerItems = new ConcurrentHashMap<>();
 
-    private final Plugin plugin;
+    public FlameAPIPlugin flameAPIPlugin;
     private boolean handleInventoryClicks = true;
     private boolean handlePlayerInteract = true;
 
-    public ItemManager(Plugin plugin) {
-        if (plugin == null) {
+    public ItemManager() {
+        if (flameAPIPlugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
-        this.plugin = plugin;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(this, flameAPIPlugin);
     }
 
     public UUID registerItem(Item item) {
@@ -286,9 +286,6 @@ public class ItemManager implements Listener {
         // playerItems.remove(player.getUniqueId());
     }
 
-    public Plugin getPlugin() {
-        return plugin;
-    }
 
     /**
      * чекнуть обрабатываются ли клики в инвентаре

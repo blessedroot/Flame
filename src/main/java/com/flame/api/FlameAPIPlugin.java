@@ -4,19 +4,11 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.flame.api.api.FlameAPI;
 import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
-import com.flame.api.menu.Menu;
-import com.flame.api.menu.command.MenuCommand;
-import com.flame.api.menu.holder.MenuManagerHolder;
-import com.flame.api.menu.listener.MenuListener;
-import com.flame.api.menu.manager.MenuManager;
 import com.flame.api.npc.listener.NpcClickListener;
 import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
 import com.flame.api.web.server.WebServer;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FlameAPIPlugin extends JavaPlugin {
@@ -29,6 +21,7 @@ public class FlameAPIPlugin extends JavaPlugin {
     private static FlameAPIPlugin instance;
     private FlameAPI flameAPI;
     private WebServer webServer;
+    public FlameAPIPlugin plugin;
 
     public static FlameAPIPlugin getInstance() {
         return instance;
@@ -41,7 +34,7 @@ public class FlameAPIPlugin extends JavaPlugin {
 //        getCommand("menu").setExecutor(new MenuCommand());
         ProtocolLibrary.getProtocolManager().addPacketListener(new NpcClickListener());
         getLogger().info("Вызываю пожарных! Включение");
-        startWebServer();
+        startWebServer(plugin);
     }
 
     @Override
@@ -70,8 +63,8 @@ public class FlameAPIPlugin extends JavaPlugin {
         );
     }
 
-    private void startWebServer() {
-        webServer = new WebServer();
+    private void startWebServer(FlameAPIPlugin plugin) {
+        webServer = new WebServer(plugin);
         webServer.start();
     }
 
