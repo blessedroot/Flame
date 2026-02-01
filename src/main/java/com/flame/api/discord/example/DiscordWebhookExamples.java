@@ -101,14 +101,14 @@ public class DiscordWebhookExamples {
                 });
     }
 
-    public static void example8(Player player) {
-        DiscordManager.sendAsyncWithCallback(
-                WEBHOOK_URL,
-                "Игрок " + player.getName() + " зашёл на сервер",
-                () -> player.sendMessage("§aУведомление отправлено в Discord!"),
-                () -> player.sendMessage("§cОшибка отправки в Discord")
-        );
-    }
+//    public static void example8(Player player) {
+//        DiscordManager.sendAsyncWithCallback(
+//                WEBHOOK_URL,
+//                "Игрок " + player.getName() + " зашёл на сервер",
+//                () -> player.sendMessage("§aУведомление отправлено в Discord!"),
+//                () -> player.sendMessage("§cОшибка отправки в Discord")
+//        );
+//    }
 
     public static void example9() {
         DiscordManager.sendSuccess(WEBHOOK_URL, "Успех", "ураа, это успешно... как?");

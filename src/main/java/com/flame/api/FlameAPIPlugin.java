@@ -23,7 +23,6 @@ public class FlameAPIPlugin extends JavaPlugin {
     private static FlameAPIPlugin instance;
     private FlameAPI flameAPI;
     private NettyWebServer webServer;
-    public FlameAPIPlugin plugin;
 
     public static FlameAPIPlugin getInstance() {
         return instance;
@@ -33,25 +32,32 @@ public class FlameAPIPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
         registerAPI();
+
         ProtocolLibrary.getProtocolManager().addPacketListener(new NpcClickListener());
+
         getLogger().info("Вызываю пожарных!");
-        startWebServer(plugin);
+        startWebServer();
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getOnlinePlayers().forEach(player -> flameAPI.getHologramManager().clearAll());
+        if (flameAPI != null) {
+            flameAPI.getHologramManager().clearAll();
+            flameAPI.getScoreboardManager().shutdown();
+            flameAPI.getItemManager().clearAll();
+            flameAPI.getNpcManager().shutdown();
+        }
         stopWebServer();
         getLogger().info("Отзываю пожарных! Пожарные в ахуе!");
     }
 
     private void registerAPI() {
         HologramManager hologramManager = HologramManager.getInstance();
-        ScoreboardManager scoreboardManager = new ScoreboardManager();
-        ItemManager itemManager = new ItemManager();
-        NpcManager npcManager = new NpcManager();
+        ScoreboardManager scoreboardManager = new ScoreboardManager(this);
+        ItemManager itemManager = new ItemManager(this);
+        NpcManager npcManager = new NpcManager(this);
         DiscordManager discordManager = new DiscordManager();
-        ConfigManager configManager = new ConfigManager();
+        ConfigManager configManager = new ConfigManager(this);
 
         flameAPI = new FlameAPI(
                 hologramManager,
@@ -63,8 +69,8 @@ public class FlameAPIPlugin extends JavaPlugin {
         );
     }
 
-    private void startWebServer(FlameAPIPlugin plugin) {
-        webServer = new NettyWebServer(plugin);
+    private void startWebServer() {
+        webServer = new NettyWebServer(this);
         webServer.start();
     }
 

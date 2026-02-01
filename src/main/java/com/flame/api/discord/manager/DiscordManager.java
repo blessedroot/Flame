@@ -124,21 +124,21 @@ public class DiscordManager {
                 });
     }
 
-    public static void sendAsyncWithCallback(String url, String content, Runnable onSuccess,
-                                             Runnable onError) {
+    public static void sendAsyncWithCallback(org.bukkit.plugin.Plugin plugin, String url, String content,
+                                             Runnable onSuccess, Runnable onError) {
+        if (plugin == null) {
+            throw new IllegalArgumentException("Plugin cannot be null");
+        }
+
         sendAsync(url, content)
                 .thenRun(() -> {
                     if (onSuccess != null) {
-                        Bukkit.getScheduler().runTask(
-                                Bukkit.getPluginManager().getPlugins()[0], onSuccess
-                        );
+                        Bukkit.getScheduler().runTask(plugin, onSuccess);
                     }
                 })
                 .exceptionally(ex -> {
                     if (onError != null) {
-                        Bukkit.getScheduler().runTask(
-                                Bukkit.getPluginManager().getPlugins()[0], onError
-                        );
+                        Bukkit.getScheduler().runTask(plugin, onError);
                     }
                     return null;
                 });

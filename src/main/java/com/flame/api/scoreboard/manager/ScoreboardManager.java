@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
@@ -23,17 +21,18 @@ public class ScoreboardManager implements Listener {
 
     private final Map<UUID, FlameScoreboard> playerScoreboards = new ConcurrentHashMap<>();
     private FlameScoreboard globalScoreboard;
-    public FlameAPIPlugin flameAPIPlugin;
+    private final FlameAPIPlugin plugin;
     private BukkitTask autoUpdateTask;
     private Consumer<Player> scoreboardUpdater;
     private long updateInterval = 20L; // 1 секунда по умолчанию
 
-    public ScoreboardManager() {
-        if (flameAPIPlugin == null) {
+    public ScoreboardManager(FlameAPIPlugin plugin) {
+        if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
+        this.plugin = plugin;
         this.globalScoreboard = new FlameScoreboard();
-        Bukkit.getPluginManager().registerEvents(this, flameAPIPlugin);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     /**
@@ -205,12 +204,12 @@ public class ScoreboardManager implements Listener {
             autoUpdateTask.cancel();
         }
 
-        autoUpdateTask = Bukkit.getScheduler().runTaskTimer(flameAPIPlugin, () -> {
+        autoUpdateTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 try {
                     updater.accept(player);
                 } catch (Exception e) {
-                    flameAPIPlugin.getLogger().warning("Error updating scoreboard for " + player.getName() + ": " + e.getMessage());
+                    plugin.getLogger().warning("Error updating scoreboard for " + player.getName() + ": " + e.getMessage());
                 }
             }
         }, 0L, interval);

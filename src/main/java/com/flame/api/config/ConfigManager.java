@@ -13,15 +13,22 @@ import java.util.Set;
 
 public class ConfigManager {
 
-    public FlameAPIPlugin flameAPIPlugin;
+    private final FlameAPIPlugin plugin;
     private final Map<String, FlameConfig> configs = new HashMap<>();
+
+    public ConfigManager(FlameAPIPlugin plugin) {
+        if (plugin == null) {
+            throw new IllegalArgumentException("Plugin cannot be null");
+        }
+        this.plugin = plugin;
+    }
 
     public FlameConfig load(String name) {
         if (configs.containsKey(name)) {
             return configs.get(name);
         }
 
-        FlameConfig config = FlameConfig.create(flameAPIPlugin, name);
+        FlameConfig config = FlameConfig.create(plugin, name);
         configs.put(name, config);
         return config;
     }

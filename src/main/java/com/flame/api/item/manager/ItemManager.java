@@ -2,6 +2,7 @@ package com.flame.api.item.manager;
 
 import com.flame.api.FlameAPIPlugin;
 import com.flame.api.item.Item;
+import com.flame.api.item.util.NbtItemTag;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,69 +21,53 @@ import java.util.logging.Logger;
 
 /**
  * author : s0ckett
- * date : 31.01.26
+ * date : 01.02.26
  */
 public class ItemManager implements Listener {
 
     private static final Logger LOGGER = Logger.getLogger(ItemManager.class.getName());
 
-    private final Map<UUID, Item> items = new ConcurrentHashMap<>();
+    private final FlameAPIPlugin plugin;
 
-    private final Map<ItemStack, UUID> itemStackToUuid = new ConcurrentHashMap<>();
+    private final Map<UUID, Item> items = new ConcurrentHashMap<>();
 
     private final Map<UUID, Set<UUID>> playerItems = new ConcurrentHashMap<>();
 
-    public FlameAPIPlugin flameAPIPlugin;
     private boolean handleInventoryClicks = true;
     private boolean handlePlayerInteract = true;
 
-    public ItemManager() {
-        if (flameAPIPlugin == null) {
+    public ItemManager(FlameAPIPlugin plugin) {
+        if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
-        Bukkit.getPluginManager().registerEvents(this, flameAPIPlugin);
+        this.plugin = plugin;
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     public UUID registerItem(Item item) {
         if (item == null) {
             throw new IllegalArgumentException("Item cannot be null");
         }
-
         UUID uuid = UUID.randomUUID();
         items.put(uuid, item);
-        itemStackToUuid.put(item.getItemStack(), uuid);
-
         return uuid;
     }
 
     public boolean unregisterItem(UUID uuid) {
-        Item item = items.remove(uuid);
-        if (item != null) {
-            itemStackToUuid.remove(item.getItemStack());
+        if (uuid == null) return false;
+        Item removed = items.remove(uuid);
+        if (removed == null) return false;
 
-            // Удаляем из всех игроков
-            playerItems.values().forEach(set -> set.remove(uuid));
-
-            return true;
-        }
-        return false;
+        playerItems.values().forEach(set -> set.remove(uuid));
+        return true;
     }
 
     public Item getItem(UUID uuid) {
-        return items.get(uuid);
-    }
-
-    public Item getItem(ItemStack itemStack) {
-        if (itemStack == null) {
-            return null;
-        }
-
-        UUID uuid = itemStackToUuid.get(itemStack);
-        return uuid != null ? items.get(uuid) : null;
+        return uuid == null ? null : items.get(uuid);
     }
 
     public boolean isRegistered(ItemStack itemStack) {
-        return getItem(itemStack) != null;
+        return getUuid(itemStack) != null;
     }
 
     public UUID addItemToPlayer(Player player, Item item, int slot) {
@@ -92,15 +76,17 @@ public class ItemManager implements Listener {
         }
 
         UUID itemUuid = registerItem(item);
-        Inventory inventory = player.getInventory();
 
+        ItemStack stack = item.getItemStack();
+        stack = NbtItemTag.withFlameId(stack, itemUuid.toString());
+
+        Inventory inventory = player.getInventory();
         if (slot >= 0 && slot < inventory.getSize()) {
-            inventory.setItem(slot, item.getItemStack());
+            inventory.setItem(slot, stack);
         } else {
-            inventory.addItem(item.getItemStack());
+            inventory.addItem(stack);
         }
 
-        // Отслеживаем предметы игрока
         playerItems.computeIfAbsent(player.getUniqueId(), k -> ConcurrentHashMap.newKeySet())
                 .add(itemUuid);
 
@@ -121,7 +107,12 @@ public class ItemManager implements Listener {
             return false;
         }
 
-        player.getInventory().remove(item.getItemStack());
+        for (ItemStack stack : player.getInventory().getContents()) {
+            UUID found = getUuid(stack);
+            if (uuid.equals(found)) {
+                player.getInventory().remove(stack);
+            }
+        }
 
         Set<UUID> playerItemSet = playerItems.get(player.getUniqueId());
         if (playerItemSet != null) {
@@ -131,11 +122,6 @@ public class ItemManager implements Listener {
         return true;
     }
 
-    /**
-     * гет всех предметов игрока
-     * @param player игрок
-     * @return неизменяемый список предметов
-     */
     public List<Item> getPlayerItems(Player player) {
         if (player == null) {
             return Collections.emptyList();
@@ -157,82 +143,60 @@ public class ItemManager implements Listener {
         return Collections.unmodifiableList(result);
     }
 
-    /**
-     * clearplayeritems
-     * @param player игрок
-     */
     public void clearPlayerItems(Player player) {
         if (player == null) {
             return;
         }
 
         Set<UUID> uuids = playerItems.remove(player.getUniqueId());
-        if (uuids != null) {
-            for (UUID uuid : uuids) {
-                Item item = items.get(uuid);
-                if (item != null) {
-                    player.getInventory().remove(item.getItemStack());
-                }
+        if (uuids == null || uuids.isEmpty()) {
+            return;
+        }
+
+        ItemStack[] contents = player.getInventory().getContents();
+        for (int i = 0; i < contents.length; i++) {
+            UUID found = getUuid(contents[i]);
+            if (found != null && uuids.contains(found)) {
+                contents[i] = null;
             }
         }
+        player.getInventory().setContents(contents);
     }
 
-    /**
-     * посмотреть количество зарегистрированных предметов
-     * @return количество предметов
-     */
     public int getItemCount() {
         return items.size();
     }
 
-    /**
-     * посмотреть количество игроков с предметами
-     * @return количество игроков
-     */
     public int getPlayerCount() {
         return playerItems.size();
     }
 
-    /**
-     * clear
-     */
     public void clearAll() {
         items.clear();
-        itemStackToUuid.clear();
         playerItems.clear();
     }
 
-    /**
-     * on/off обработку кликов в инвентаре
-     * @param handle true для включения
-     */
     public void setHandleInventoryClicks(boolean handle) {
         this.handleInventoryClicks = handle;
     }
 
-    /**
-     * on/off обработку взаимодействий игрока
-     * @param handle true для включения
-     */
     public void setHandlePlayerInteract(boolean handle) {
         this.handlePlayerInteract = handle;
     }
 
-    /**
-     * clicks
-     */
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent event) {
         if (!handleInventoryClicks) {
             return;
         }
 
-        ItemStack clickedItem = event.getCurrentItem();
-        if (clickedItem == null || clickedItem.getType().toString().equals("AIR")) {
+        ItemStack clicked = event.getCurrentItem();
+        UUID uuid = getUuid(clicked);
+        if (uuid == null) {
             return;
         }
 
-        Item item = getItem(clickedItem);
+        Item item = items.get(uuid);
         if (item == null || !item.hasAction()) {
             return;
         }
@@ -241,7 +205,6 @@ public class ItemManager implements Listener {
 
         if (event.getWhoClicked() instanceof Player) {
             Player player = (Player) event.getWhoClicked();
-
             try {
                 item.executeAction(player);
             } catch (Exception ex) {
@@ -257,13 +220,14 @@ public class ItemManager implements Listener {
             return;
         }
 
-        ItemStack item = event.getItem();
-        if (item == null || item.getType().toString().equals("AIR")) {
+        ItemStack stack = event.getItem();
+        UUID uuid = getUuid(stack);
+        if (uuid == null) {
             return;
         }
 
-        Item registeredItem = getItem(item);
-        if (registeredItem == null || !registeredItem.hasAction()) {
+        Item item = items.get(uuid);
+        if (item == null || !item.hasAction()) {
             return;
         }
 
@@ -271,7 +235,7 @@ public class ItemManager implements Listener {
         Player player = event.getPlayer();
 
         try {
-            registeredItem.executeAction(player);
+            item.executeAction(player);
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE, "Error executing item action for " + player.getName(), ex);
             player.sendMessage("§cОшибка при использовании предмета");
@@ -280,12 +244,8 @@ public class ItemManager implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-
-        // удаляем отслеживание предметов игрока, ну эт ситуативно, оставил ниже
-        // playerItems.remove(player.getUniqueId());
+        playerItems.remove(event.getPlayer().getUniqueId());
     }
-
 
     /**
      * чекнуть обрабатываются ли клики в инвентаре
@@ -301,5 +261,16 @@ public class ItemManager implements Listener {
      */
     public boolean isHandlingPlayerInteract() {
         return handlePlayerInteract;
+    }
+
+    private static UUID getUuid(ItemStack stack) {
+        if (stack == null) return null;
+        String id = NbtItemTag.readFlameId(stack);
+        if (id == null) return null;
+        try {
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 }

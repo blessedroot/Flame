@@ -2,7 +2,6 @@ package com.flame.api.npc.model;
 
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.flame.api.npc.util.FlameNpcPacketUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -52,14 +51,6 @@ public class FlameNpc {
 
     public void spawn(Player viewer) {
         FlameNpcPacketUtil.spawnNpc(viewer, this);
-
-        if (lookAtPlayer) {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(Bukkit.getPluginManager().getPlugin("FlameAPI"), () -> {
-                if (viewer.isOnline()) {
-                    FlameNpcPacketUtil.lookAtPlayer(viewer, this);
-                }
-            }, 0L, 10L);
-        }
     }
 
     public void destroy(Player viewer) {

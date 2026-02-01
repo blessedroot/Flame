@@ -6,7 +6,6 @@ import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
 import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
 public class FlameAPI {
 
@@ -86,11 +85,11 @@ public class FlameAPI {
      * @return DiscordManager
      */
     public DiscordManager getDiscordManager() {
-        return new DiscordManager();
+        return discordManager;
     }
 
     public ConfigManager getConfigManager() {
-        return new ConfigManager();
+        return configManager;
     }
 }
 

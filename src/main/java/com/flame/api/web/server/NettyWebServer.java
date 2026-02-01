@@ -10,7 +10,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -134,7 +135,52 @@ public class NettyWebServer {
     }
 
     private void registerDefaultRoutes() {
-        // addRoute()
+        addGetRoute("/api/health", (ctx, request) ->
+                sendJson(ctx, "{\"ok\":true,\"service\":\"flame\"}"));
+
+        addGetRoute("/api/server", (ctx, request) -> Bukkit.getScheduler().runTask(plugin, () -> {
+            int online = Bukkit.getOnlinePlayers().size();
+            int max = Bukkit.getMaxPlayers();
+            String version = escapeJson(Bukkit.getVersion());
+            String name = escapeJson(Bukkit.getServerName());
+
+            String json = "{"
+                    + "\"online\":" + online + ","
+                    + "\"maxPlayers\":" + max + ","
+                    + "\"version\":\"" + version + "\","
+                    + "\"serverName\":\"" + name + "\""
+                    + "}";
+
+            sendJson(ctx, json);
+        }));
+
+        addGetRoute("/api/player/{name}", (ctx, request) -> Bukkit.getScheduler().runTask(plugin, () -> {
+            String uri = request.getUri();
+            String path = uri.contains("?") ? uri.substring(0, uri.indexOf("?")) : uri;
+            String[] parts = path.split("/");
+            String playerName = parts.length >= 4 ? parts[3] : null;
+
+            if (playerName == null || playerName.isEmpty()) {
+                sendError(ctx, HttpResponseStatus.BAD_REQUEST, "Player name is required");
+                return;
+            }
+
+            Player player = Bukkit.getPlayerExact(playerName);
+            if (player == null) {
+                sendError(ctx, HttpResponseStatus.NOT_FOUND, "Player not found");
+                return;
+            }
+
+            String json = "{"
+                    + "\"name\":\"" + escapeJson(player.getName()) + "\","
+                    + "\"uuid\":\"" + player.getUniqueId() + "\","
+                    + "\"health\":" + ((int) player.getHealth()) + ","
+                    + "\"level\":" + player.getLevel() + ","
+                    + "\"world\":\"" + escapeJson(player.getWorld().getName()) + "\""
+                    + "}";
+
+            sendJson(ctx, json);
+        }));
     }
 
     public void addRoute(String path, RouteHandler handler) {
