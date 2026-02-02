@@ -5,12 +5,12 @@ import com.flame.api.api.FlameAPI;
 import com.flame.api.config.ConfigManager;
 import com.flame.api.discord.manager.DiscordManager;
 import com.flame.api.hologram.manager.HologramManager;
+import com.flame.api.gui.GuiService;
 import com.flame.api.item.manager.ItemManager;
 import com.flame.api.npc.listener.NpcClickListener;
 import com.flame.api.npc.manager.NpcManager;
 import com.flame.api.scoreboard.manager.ScoreboardManager;
 import com.flame.api.web.server.NettyWebServer;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FlameAPIPlugin extends JavaPlugin {
@@ -46,6 +46,7 @@ public class FlameAPIPlugin extends JavaPlugin {
             flameAPI.getScoreboardManager().shutdown();
             flameAPI.getItemManager().clearAll();
             flameAPI.getNpcManager().shutdown();
+            flameAPI.getGuiService().shutdownAll();
         }
         stopWebServer();
         getLogger().info("Отзываю пожарных! Пожарные в ахуе!");
@@ -58,6 +59,7 @@ public class FlameAPIPlugin extends JavaPlugin {
         NpcManager npcManager = new NpcManager(this);
         DiscordManager discordManager = new DiscordManager();
         ConfigManager configManager = new ConfigManager(this);
+        GuiService guiService = GuiService.init(this);
 
         flameAPI = new FlameAPI(
                 hologramManager,
@@ -65,7 +67,8 @@ public class FlameAPIPlugin extends JavaPlugin {
                 itemManager,
                 npcManager,
                 discordManager,
-                configManager
+                configManager,
+                guiService
         );
     }
 

@@ -2,6 +2,7 @@ package com.flame.api.api;
 
 import com.flame.api.config.ConfigManager;
 import com.flame.api.discord.manager.DiscordManager;
+import com.flame.api.gui.GuiService;
 import com.flame.api.hologram.manager.HologramManager;
 import com.flame.api.item.manager.ItemManager;
 import com.flame.api.npc.manager.NpcManager;
@@ -11,7 +12,7 @@ public class FlameAPI {
 
     /**
      * author : s0ckett
-     * date : 01.02.26
+     * date : 02.02.26
      */
 
     private final HologramManager hologramManager;
@@ -20,15 +21,15 @@ public class FlameAPI {
     private final NpcManager npcManager;
     private final DiscordManager discordManager;
     private final ConfigManager configManager;
-//    private final MenuManager menuManager;
+    private final GuiService guiService;
 
     public FlameAPI(HologramManager hologramManager,
                     ScoreboardManager scoreboardManager,
                     ItemManager itemManager,
                     NpcManager npcManager,
                     DiscordManager discordManager,
-                    ConfigManager configManager)
-//                    MenuManager menuManager)
+                    ConfigManager configManager,
+                    GuiService guiService)
     {
 
         this.hologramManager = hologramManager;
@@ -37,7 +38,7 @@ public class FlameAPI {
         this.npcManager = npcManager;
         this.discordManager = discordManager;
         this.configManager = configManager;
-//        this.menuManager = menuManager;
+        this.guiService = guiService;
     }
 
 
@@ -91,5 +92,13 @@ public class FlameAPI {
     public ConfigManager getConfigManager() {
         return configManager;
     }
-}
 
+    /**
+     * Получить сервис для работы с GUI.
+     *
+     * @return GuiService
+     */
+    public GuiService getGuiService() {
+        return guiService;
+    }
+}
